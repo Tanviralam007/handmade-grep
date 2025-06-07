@@ -1,5 +1,5 @@
 # handmade-grep
-# a small grep clone written in C++, a fun project to learn C++ and regex
+### a small grep clone written in C++, a fun project to learn C++ and regex
 
 ### inital implementation
 - [x] read file
@@ -21,7 +21,8 @@ Compile the soruce code with:
 ```
 
 - for multiple files:
-```./build/handmade-grep.exe "hello" test.txt test2.txt
+```
+./build/handmade-grep.exe "hello" test.txt test2.txt
 ```
 
 - for multiple patterns:
@@ -30,5 +31,6 @@ Compile the soruce code with:
 ```
 
 - use with pipe:
-```cat test.txt | ./build/handmade-grep.exe "hello"
+```
+cat test.txt | ./build/handmade-grep.exe "hello"
 ```
