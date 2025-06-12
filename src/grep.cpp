@@ -10,18 +10,16 @@ mygrep::mygrep(const std::string& pattern) : pattern_(pattern)
 
 bool mygrep::search(const std::string& text) const 
 {
-    return text.find(pattern_) != std::string::npos;
+    // Use find_matches to check if there are any matches
+    return !find_matches(text).empty();
 }
 
 std::vector<size_t> mygrep::find_matches(const std::string& line) const 
 {
     std::vector<size_t> matches;
-
-    // if pattern is longer than line, no matches
-    if (pattern_.length() > line.length()) return matches;
     
-    // search through each possible starting position
-    for (size_t i = 0; i <= line.length() - pattern_.length(); ++i) {
+    // Search through each possible starting position
+    for (size_t i = 0; i < line.length(); ++i) {
         if (match_literal(line, i)) {
             matches.push_back(i);
         }
@@ -84,7 +82,6 @@ bool mygrep::match_single_element(const std::string& text, size_t text_pos,
         consumed_text = 1;
         return true;
     }
-
     
     return false;
 }
@@ -101,7 +98,7 @@ void mygrep::process_file(const std::string& filename) const
 
     while (std::getline(file, line)) {
         if (search(line)) {
-            std::cout << "Line " << line_number << ": " << line << std::endl;
+            std::cout << filename << ":" << line_number << ":" << line << std::endl;
         }
         ++line_number;
     }
@@ -116,7 +113,7 @@ void mygrep::process_stdin() const
 
     while (std::getline(std::cin, line)) {
         if (search(line)) {
-            std::cout << "Line " << line_number << ": " << line << std::endl;
+            std::cout << line_number << ":" << line << std::endl;
         }
         ++line_number;
     }
