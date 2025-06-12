@@ -1,4 +1,8 @@
 hello world
-this is a test
-hello again
-no match here
+Order 123
+Phone: 555-1234
+ID-7 is valid
+No digits here
+Price: $99
+Room 42A
+\d literally
