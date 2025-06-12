@@ -32,16 +32,61 @@ std::vector<size_t> mygrep::find_matches(const std::string& line) const
 
 bool mygrep::match_literal(const std::string& text, size_t pos) const 
 {
-    // match if there is enough characters left in text
-    if (pos + pattern_.length() > text.length()) return false;
-
-    // compare each character in the pattern with the text
-    for (size_t i = 0; i < pattern_.length(); ++i) {
-        if (text[pos + i] != pattern_[i]) {
-            return false; // mismatch found
+    size_t text_pos = pos;
+    size_t pattern_pos = 0;
+    
+    while (pattern_pos < pattern_.length() && text_pos < text.length()) {
+        size_t consumed_pattern = 0;
+        size_t consumed_text = 0;
+        
+        if (!match_single_element(text, text_pos, pattern_, pattern_pos, 
+                               consumed_pattern, consumed_text)) {
+            return false;
         }
+        
+        pattern_pos += consumed_pattern;
+        text_pos += consumed_text;
     }
-    return true; // all characters matched successfully
+    
+    // Pattern must be fully consumed for a match
+    return pattern_pos == pattern_.length();
+}
+
+bool mygrep::is_digit(char c) const 
+{
+    return c >= '0' && c <= '9';
+}
+
+bool mygrep::match_single_element(const std::string& text, size_t text_pos, 
+                                  const std::string& pattern, size_t pattern_pos, 
+                                  size_t& consumed_pattern, size_t& consumed_text) const 
+{
+    // Check if we have characters left to match
+    if (text_pos >= text.length() || pattern_pos >= pattern.length()) {
+        return false;
+    }
+    
+    // Check for \d pattern
+    if (pattern_pos + 1 < pattern.length() && 
+        pattern[pattern_pos] == '\\' && pattern[pattern_pos + 1] == 'd') {
+        
+        if (is_digit(text[text_pos])) {
+            consumed_pattern = 2; // consumed '\d'
+            consumed_text = 1;    // consumed one digit
+            return true;
+        }
+        return false;
+    }
+    
+    // Literal character matching
+    if (text[text_pos] == pattern[pattern_pos]) {
+        consumed_pattern = 1;
+        consumed_text = 1;
+        return true;
+    }
+
+    
+    return false;
 }
 
 void mygrep::process_file(const std::string& filename) const 
