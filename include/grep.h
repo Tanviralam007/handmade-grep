@@ -30,7 +30,7 @@ class mygrep {
         bool is_digit(char c) const;
 
         // Helper function to match a single pattern element at position
-        bool matchSingleElement(const std::string& text, size_t text_pos, 
+        bool match_single_element(const std::string& text, size_t text_pos, 
                            const std::string& pattern, size_t pattern_pos, 
                            size_t& consumed_pattern, size_t& consumed_text) const;
 };
