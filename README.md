@@ -1,36 +1,101 @@
 # handmade-grep
 ### a small grep clone written in C++, a fun project to learn C++ and regex
 
-### inital implementation
-- [x] read file
-- [x] read file line by line
-- [x] regex search
-- [x] print results
-- [x] command line arguments
-- [x] support for multiple files
-- [x] support for multiple regex patterns
-- [x] support for case insensitive search
-- [x] support for whole word search
-- [x] support for line number output
+## Features
 
-Compile the soruce code with:
+### ✅ Implemented
+- [x] Read file and process line by line
+- [x] Literal character matching
+- [x] Digit pattern matching (`\d`)
+- [x] Command line arguments parsing
+- [x] Support for multiple files
+- [x] Standard input (stdin) support
+- [x] Line number output with filename
+- [x] Mixed pattern support (literal + regex)
 
-- for single file:
+### 🚧 Planned Features
+- [ ] Multiple regex patterns in single search
+- [ ] Case insensitive search (`-i` flag)
+- [ ] Whole word search (`-w` flag)
+- [ ] More regex patterns (`\w`, `\s`, `\n`, etc.)
+- [ ] Character classes (`[abc]`, `[0-9]`)
+- [ ] Quantifiers (`*`, `+`, `?`)
+- [ ] Anchors (`^`, `$`)
+
+## Supported Patterns
+
+| Pattern | Description | Example |
+|---------|-------------|---------|
+| `literal` | Exact character matching | `hello` matches "hello world" |
+| `\d` | Any digit (0-9) | `\d\d\d` matches "123" in "Order 123" |
+| `mixed` | Combination of literal and patterns | `ID-\d` matches "ID-7" |
+
+## Build Instructions
+
+```bash
+# Configure and build with CMake
+cmake -B build -G "MinGW Makefiles"
+cmake --build build
 ```
+
+## Usage Examples
+
+### Single file search:
+```bash
 ./build/handmade-grep.exe "hello" test.txt
 ```
 
-- for multiple files:
-```
+### Multiple files:
+```bash
 ./build/handmade-grep.exe "hello" test.txt test2.txt
 ```
 
-- for multiple patterns:
-```
-./build/handmade-grep.exe "hello" "world" test.txt
+### Pattern matching with digits:
+```bash
+# Find any digit
+./build/handmade-grep.exe "\d" test.txt
+
+# Find 3 consecutive digits
+./build/handmade-grep.exe "\d\d\d" test.txt
+
+# Find mixed patterns
+./build/handmade-grep.exe "Order \d" test.txt
+./build/handmade-grep.exe "ID-\d" test.txt
 ```
 
-- use with pipe:
-```
+### Use with pipe (stdin):
+```bash
 cat test.txt | ./build/handmade-grep.exe "hello"
+echo "Test 123" | ./build/handmade-grep.exe "\d"
+```
+
+### Interactive mode:
+```bash
+./build/handmade-grep.exe "pattern"
+```
+
+## Sample Output
+
+```bash
+$ ./build/handmade-grep.exe "\d" test.txt
+test.txt:2:Order 123
+test.txt:3:Phone: 555-1234
+test.txt:4:ID-7 is valid
+
+$ ./build/handmade-grep.exe "hello" file1.txt file2.txt
+file1.txt:1:hello world
+file2.txt:3:say hello
+```
+
+## Project Structure
+
+```
+mygrep/
+├── src/
+│   ├── main.cpp      # Main program entry point
+│   └── grep.cpp      # Core grep implementation
+├── include/
+│   └── grep.h        # Header file with class definition
+├── CMakeLists.txt    # Build configuration
+└── README.md         # This file
 ```
